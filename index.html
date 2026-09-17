@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Новая запись</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  h1 {
+    color: #0b2a5b; /* тёмно-синий */
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    color: #8b8b8b;
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 320px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-size: 17px;
+    font-family: inherit;
+    color: #1a1a1a;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #ffffff;
+  }
+
+  textarea:focus {
+    border-color: #0b2a5b;
+    box-shadow: 0 0 0 3px rgba(11, 42, 91, 0.08);
+  }
+
+  textarea::placeholder {
+    color: #b0b0b0;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 26px;
+    border-radius: 10px;   /* квадратные кнопки с закруглёнными краями */
+    border: none;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.06s ease;
+  }
+
+  .btn-save {
+    background: #0b2a5b;
+    color: #ffffff;
+  }
+
+  .btn-save:hover {
+    background: #0f3670;
+  }
+
+  .btn-save:active {
+    transform: scale(0.98);
+  }
+
+  .btn-cancel {
+    background: #f2f2f2;
+    color: #444;
+  }
+
+  .btn-cancel:hover {
+    background: #e9e9e9;
+  }
+
+  .status {
+    margin-top: 14px;
+    font-size: 14px;
+    color: #2e7d32;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-align: right;
+  }
+
+  .status.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Новая запись</h1>
+    <p class="subtitle">Напишите что-нибудь и нажмите «Сохранить»</p>
+
+    <form id="noteForm">
+      <textarea id="noteText" placeholder="Введите текст…"></textarea>
+
+      <div class="actions">
+        <button type="button" class="btn-cancel" id="cancelBtn">Отмена</button>
+        <button type="submit" class="btn-save">Сохранить</button>
+      </div>
+
+      <div class="status" id="status">Текст сохранён ✓</div>
+    </form>
+  </div>
+
+<script>
+  const form = document.getElementById('noteForm');
+  const textarea = document.getElementById('noteText');
+  const status = document.getElementById('status');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = textarea.value.trim();
+
+    if (!text) {
+      status.textContent = 'Введите текст перед сохранением';
+      status.style.color = '#c62828';
+      status.classList.add('show');
+      return;
+    }
+
+    // Здесь можно отправить данные на сервер:
+    // fetch('/save', { method: 'POST', body: JSON.stringify({ text }) })
+
+    localStorage.setItem('note', text);
+    status.textContent = 'Текст сохранён ✓';
+    status.style.color = '#2e7d32';
+    status.classList.add('show');
+
+    setTimeout(() => status.classList.remove('show'), 2500);
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    textarea.value = '';
+    status.classList.remove('show');
+    textarea.focus();
+  });
+</script>
+</body>
+</html>
